@@ -1,0 +1,14 @@
+﻿<orders>
+   <order>
+      <ordername>그림판 실행</ordername>
+      <voiceOutput>그림판을 실행합니다</voiceOutput>
+      <cmdString>c:\\windows\\system32\\mspaint.exe</cmdString>
+      <cmdArgs></cmdArgs>
+      <description>그림판 실행 명령</description>
+      <inputOrders>
+         <inputOrder>그림판</inputOrder>
+         <inputOrder>그림판 켜줘</inputOrder>
+         <inputOrder>그림판 켜</inputOrder>
+      </inputOrders>
+   </order>
+</orders>

@@ -1,0 +1,13 @@
+﻿<orders>
+   <order>
+      <ordername>ip 확인</ordername>
+      <voiceOutput>ip는 다음과 같습니다.</voiceOutput>
+      <cmdString>start cmd /k ipconfig</cmdString>
+      <cmdArgs></cmdArgs>
+      <description>ip확인 명령</description>
+      <inputOrders>
+         <inputOrder>아이피 알려줘</inputOrder>
+         <inputOrder>아이피 확인</inputOrder>
+      </inputOrders>
+   </order>
+</orders>

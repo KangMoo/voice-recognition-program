@@ -1,0 +1,13 @@
+﻿<orders>
+   <order>
+      <ordername>콘솔 실행</ordername>
+      <voiceOutput>콘솔을 실행합니다</voiceOutput>
+      <cmdString>start cmd /k c:\\windows\\system32\\cmd.exe</cmdString>
+      <cmdArgs></cmdArgs>
+      <description>콘솔을 실행하는 명령</description>
+      <inputOrders>
+         <inputOrder>콘솔</inputOrder>
+         <inputOrder>콘솔창</inputOrder>
+      </inputOrders>
+   </order>
+</orders>

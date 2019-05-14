@@ -1,0 +1,20 @@
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\bin\Debug\SR_Test.exe.config
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\bin\Debug\SR_Test.exe
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\bin\Debug\SR_Test.pdb
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\obj\Debug\SR_Test.Form1.resources
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\obj\Debug\SR_Test.Properties.Resources.resources
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\obj\Debug\SR_Test.csproj.GenerateResource.Cache
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\obj\Debug\SR_Test.exe
+c:\users\copynull\documents\visual studio 2013\Projects\SR_Test\SR_Test\obj\Debug\SR_Test.pdb
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\bin\Debug\SR_Test.exe.config
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\bin\Debug\SR_Test.exe
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\bin\Debug\SR_Test.pdb
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\bin\Debug\Microsoft.Speech.dll
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.Form1.resources
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.Properties.Resources.resources
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.csproj.GenerateResource.cache
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.csproj.CoreCompileInputs.cache
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.csproj.CopyComplete
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.exe
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.pdb
+C:\Users\hkm06\OneDrive\노트북자료\다운로드\STT를 위한 발악\SR_Test (2)\SR_Test\obj\Debug\SR_Test.csprojAssemblyReference.cache

@@ -1,0 +1,13 @@
+﻿<orders>
+   <order>
+      <ordername>디스크 정리</ordername>
+      <voiceOutput>디스크를 정리합니다.</voiceOutput>
+      <cmdString>cleanmgr</cmdString>
+      <cmdArgs></cmdArgs>
+      <description>디스크를 정리하는 명령</description>
+      <inputOrders>
+         <inputOrder>디스크 정리해줘</inputOrder>
+         <inputOrder>디스크 정리</inputOrder>
+      </inputOrders>
+   </order>
+</orders>
