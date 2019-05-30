@@ -45,6 +45,7 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button7 = new System.Windows.Forms.Button();
+            this.TestButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -195,11 +196,22 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // TestButton
+            // 
+            this.TestButton.Location = new System.Drawing.Point(426, 242);
+            this.TestButton.Name = "TestButton";
+            this.TestButton.Size = new System.Drawing.Size(75, 23);
+            this.TestButton.TabIndex = 16;
+            this.TestButton.Text = "TestButton";
+            this.TestButton.UseVisualStyleBackColor = true;
+            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(535, 392);
+            this.Controls.Add(this.TestButton);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.button6);
@@ -238,6 +250,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button TestButton;
     }
 }
 
