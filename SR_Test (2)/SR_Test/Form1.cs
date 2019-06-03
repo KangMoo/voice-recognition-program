@@ -28,10 +28,11 @@ using Grpc.Auth;
 using System.Threading;
 using System.Threading.Tasks;
 
+using System.Text.RegularExpressions;
 
 namespace SR
 {
-    
+
     public partial class Form1 : Form
     {
 
@@ -102,7 +103,6 @@ namespace SR
                 };
             waveIn.StartRecording();
             
-            gapiTxt = "명령을 말씀해 주세요.";
             gapiTxtUpdate = true;
             _Speech_On.Play();
             gapiTimer = 5;
@@ -114,16 +114,17 @@ namespace SR
             await streamingCall.WriteCompleteAsync();
             await printResponses;
             gapiTimer = 0;
+            gapiTxtUpdate = false;
             return 0;
         }
         // [END speech_transcribe_streaming_mic]
-        
+
         static double gapiTimer = 0;
         static string gapiTxt = "";
         static bool gapiTxtUpdate = false;
         static SoundPlayer _Speech_On = new SoundPlayer(SR_Test.Properties.Resources.Speech_On);
         static SoundPlayer _Speech_Sleep = new SoundPlayer(SR_Test.Properties.Resources.Speech_Sleep);
-        
+
         const double _recognizeTimer = 5;
         private List<orderStruct> orderList;
         ProcessStartInfo cmd = new ProcessStartInfo();
@@ -133,6 +134,10 @@ namespace SR
         float sttTimer = 0;
         Grammar g;
         bool isInorderList = false;
+        static string richboxtextsave;
+
+        string[] inputdatalist;
+        string[] outputdatalist;
 
         public Form1()
         {
@@ -183,12 +188,12 @@ namespace SR
 
         void sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            
+
             if (isSTTActive == false && sttTimer > 0) return;
             if (tts.State != SynthesizerState.Ready) return;
             sttTimer = 3;
-            
-            if(e.Result.Text == "시리")
+
+            if (e.Result.Text == "시리")
             {
                 inputmatch(sender, e);
                 return;
@@ -211,6 +216,7 @@ namespace SR
                     }
                 }
             }
+
             if (isInorderList == false)
             {
                 inputmatch(sender, e);
@@ -220,9 +226,11 @@ namespace SR
         //
         private void inputmatch(object sender, SpeechRecognizedEventArgs e)
         {
-            
-
             tts.SpeakAsync("명령을 말씀해주세요.");
+
+            StreamingMicRecognizeAsync(_recognizeTimer);
+
+
         }
         // 프로세스 실행
         private static void doProgram(string filename, string arg)
@@ -536,22 +544,8 @@ namespace SR
         }
         private void grammarSet()
         {
-            int size = 0;
-            foreach (orderStruct it in orderList)
-            {
-                size += it.voiceInputs.Count;
-            }
-            string[] strs = new string[size];
-            int count = 0;
-            foreach (orderStruct it in orderList)
-            {
-                foreach (string it2 in it.voiceInputs)
-                {
-                    strs[count] = it2;
-                    count++;
-                }
-            }
-
+            string[] strs = new string[1];
+            strs[0] = "음성인식 실행";
             GrammarBuilder gb = new GrammarBuilder(new Choices(strs));
             g = new Grammar(gb);
             initRS();
@@ -595,18 +589,25 @@ namespace SR
             {
                 gapiTimer -= 0.001;
             }
-            else if(gapiTimer <0)
+            else if (gapiTimer < 0)
             {
                 gapiTxtUpdate = true;
                 gapiTimer = 0;
             }
+
+            if (gapiTxtUpdate)
+            {
+                if (richboxtextsave == "")
+                    richboxtextsave = "명령을 말씀해 주세요" + "\n" + richTextBox1.Text;
+
+                richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
+            }
+            else if(richboxtextsave != "")
+            {
+                    richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
+                    richboxtextsave = "";
+            }
             
-            //if (gapiTxtUpdate)
-            //{
-            //    richTextBox1.Text = gapiTxt + "\n" + richTextBox1.Text;
-            //    gapiTxtUpdate = false;
-            //}
-            richTextBox1.Text = gapiTxt;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -651,7 +652,9 @@ namespace SR
             gapiTxt = "";
             StreamingMicRecognizeAsync(_recognizeTimer);
         }
+        
     }
+
 
     class orderStruct
     {
@@ -672,6 +675,46 @@ namespace SR
             isInActive = false;
             args = null;
         }
+        public override String ToString()
+        {
+            return this.name;
+        }
+        public string ListBoxDisplayValue
+        {
+            get
+            {
+                return this.name;
+            }
+        }
+        public string DisplayValue
+        {
+            get
+            {
+                return this.description;
+            }
+        }
+    }
+
+    class orderUnit
+    {
+        public List<string> var = new List<string>();
+        public string input = "";
+        public string PSOrder = "";
+        public string PSReturn = "";
+        public string voiceOutput = "";
+        orderUnit(string input, string PSOrder, string PSReturn, string voiceOutput)
+        {
+            this.input = input;
+            this.PSOrder = PSOrder;
+            this.PSReturn = PSReturn;
+            this.voiceOutput = voiceOutput;
+        }
+    }
+    class orderClass
+    {
+        public string name = "";
+        public string description = "";
+        public List<orderUnit> units = new List<orderUnit>();
         public override String ToString()
         {
             return this.name;
@@ -1150,7 +1193,7 @@ namespace SR
         }
         // [END speech_transcribe_streaming]
 
-        
+
 
         static bool IsStorageUri(string s) => s.Substring(0, 4).ToLower() == "gs:/";
     }

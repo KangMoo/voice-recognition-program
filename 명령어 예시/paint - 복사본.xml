@@ -1,0 +1,26 @@
+﻿<orders>
+   <order>
+      <ordername>계산</ordername>
+      <voiceOutput>계산합니다.</voiceOutput>
+      <orderUnit>
+         <var>A,B</var>
+         <input>
+            <voiceInput>$A 더하기 $B</voiceInput>
+         </input>
+         <output>
+            <PSOrder>$A+$B</PSOrder>
+            <voiceOutput>결과는 $R입니다.</voiceOutput>
+         <output>
+      </orderUnit>
+      <orderUnit>
+         <var>B,C</var>
+         <input>
+            <voiceInput>$B 빼기 $C</voiceInput>
+         </input>
+         <output>
+            <PSOrder>$B-$C</PSOrder>
+            <voiceOutput>결과는 $R입니다.</voiceOutput>
+         <output>
+      </orderUnit>
+   </order>
+</orders>
