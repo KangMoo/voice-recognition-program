@@ -1,7 +1,9 @@
 ﻿<orders>
-   <order name = "계산" description = "계산합니다">
+   <order naem = "계산" description = "계산합니다">
+      <name>계산</name>
+      <description>계산합니다.</description>
       <orderUnit>
-         <var>A,B</var>
+         <vars>A,B</vasr>
          <input>$A 더하기 $B</input>
          <PSOrder>$A+$B</PSOrder>
          <voiceOutput>결과는 $R입니다.</voiceOutput>
