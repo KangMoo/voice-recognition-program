@@ -105,7 +105,6 @@ namespace SR
 
             gapiTxtUpdate = true;
             _Speech_On.Play();
-            gapiTimer = 5;
             //Console.WriteLine("Speak now.");
             await Task.Delay(TimeSpan.FromSeconds(seconds));
             // Stop recording and shut down.
@@ -113,13 +112,11 @@ namespace SR
             lock (writeLock) writeMore = false;
             await streamingCall.WriteCompleteAsync();
             await printResponses;
-            gapiTimer = 0;
             gapiTxtUpdate = false;
             return 0;
         }
         // [END speech_transcribe_streaming_mic]
 
-        static double gapiTimer = 0;
         static string gapiTxt = "";
         static bool gapiTxtUpdate = false;
         static SoundPlayer _Speech_On = new SoundPlayer(SR_Test.Properties.Resources.Speech_On);
@@ -193,11 +190,10 @@ namespace SR
         }
 
         //
-        private void inputmatch(object sender, SpeechRecognizedEventArgs e)
+        private async void inputmatch(object sender, SpeechRecognizedEventArgs e)
         {
             gapiTxt = "";
-            StreamingMicRecognizeAsync(_recognizeTimer);
-
+            var task1 = await StreamingMicRecognizeAsync(_recognizeTimer);
 
             string inputString = gapiTxt;
             orderUnit oU = new orderUnit();
@@ -206,33 +202,154 @@ namespace SR
             {
                 foreach (orderUnit it2 in it.units)
                 {
-                    if (compareOrder(inputString, it2.input))
+                    string temp = compareOrder(inputString, it2);
+                    if (temp != "")
                     {
-                        oU = it2;
-                        brk = true;
-                        break;
+                        int k = 0;
+                        //doPowerShellProgram(temp);
                     }
                 }
                 if (brk == true) break;
             }
 
             //mkPSOrder();
-            doPowerShellProgram(oU.PSOrder);
+            //doPowerShellProgram(oU.PSOrder);
         }
-        private bool compareOrder(string inputString, string order)
+
+        //명령어가 매칭이 맞을경우 PowerShell 명령어 생성후 리턴/ 아니면 ""리턴
+        private string compareOrder(string inputString, orderUnit oU)
         {
-            //var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(str));
-            //List<string> inputTokens = new List<string>();
-            //foreach (KoreanToken it in stems)
-            //{
-            //    if (it.Pos == KoreanPos.Josa) continue;
-            //    inputTokens.Add(it.Text);
-            //}
-            //
-            return false;
+            var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(inputString));
+            List<string> inputTokens = new List<string>();
+            List<string> orderSplit = new List<string>();
+
+            //형태소 분석기를 통해 추려내기
+            foreach (KoreanToken it in stems)
+            {
+                if (it.Pos == KoreanPos.Space) continue;
+                inputTokens.Add(it.Text);
+            }
+            stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(oU.input));
+            foreach (KoreanToken it in stems)
+            {
+                if (it.Pos == KoreanPos.Space) continue;
+                orderSplit.Add(it.Text);
+            }
+
+            List<string> vars = new List<string>();
+            int varCount = 0;
+            int splitcount = 0;
+            int nowPoint = 0;
+            bool incorrect = false;
+
+            //명령어 매칭
+            for (int i = 0; i < inputTokens.Count(); i++)
+            {
+                if (splitcount >= orderSplit.Count() && varCount > 0)
+                {
+                    //incorrect
+                    if (nowPoint + varCount >= inputTokens.Count())
+                    {
+                        incorrect = true;
+                        break;
+                    }
+                    else
+                    {
+                        while (varCount > 0)
+                        {
+                            vars.Add(inputTokens[i]);
+                            i++;
+                            varCount--;
+                        }
+                        break;
+                    }
+                }
+                else if (orderSplit[splitcount][0] == '$')
+                {
+                    varCount++;
+                    splitcount++;
+                    i--;
+                }
+                else if (orderSplit[splitcount] == inputTokens[i])
+                {
+                    if (varCount > 0)
+                    {
+                        //incorrect
+                        if (varCount > i)
+                        {
+                            incorrect = true;
+                            break;
+                        }
+                        else
+                        {
+                            while (varCount > 0)
+                            {
+                                vars.Add(inputTokens[i - varCount]);
+                                varCount--;
+                            }
+                        }
+                    }
+                    nowPoint = i;
+                    splitcount++;
+                }
+            }
+
+            int kkk = 0;
+
+            if (incorrect || splitcount != orderSplit.Count())
+            {
+                return "";
+            }
+
+            return mkPSOrder(vars, oU);
+
         }
-        private void mkPSOrder()
+        //PowerShell 명령어 만드는 함수
+        private string mkPSOrder(List<string> vars, orderUnit oU)
         {
+
+            //변수 채워넣기
+            string[] dSplit = oU.PSOrder.Split('$');
+            for(int i =1; i<dSplit.Count();i++)
+            {
+                int num = dSplit[i][0] - '0';
+                dSplit[i] = dSplit[i].Remove(0, 1);
+                dSplit[i] = vars[num] + dSplit[i];
+            }
+            string PSOrder = "";
+            foreach(string x in dSplit)
+            {
+                PSOrder += x;
+            }
+            var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(PSOrder));
+            List<string> psorderSplit = new List<string>();
+            string result = "";
+            //형태소 분석기를 통해 추려내기
+            foreach (KoreanToken it in stems)
+            {
+                psorderSplit.Add(it.Text);
+            }
+
+            for (int i = 0; i < psorderSplit.Count(); i++)
+            {
+                if (psorderSplit[i][0] == '$')
+                {
+                    psorderSplit[i] += psorderSplit[i + 1];
+                    psorderSplit.RemoveAt(i + 1);
+                }
+            }
+            for (int i =0; i<psorderSplit.Count();i++)
+            {
+                if(psorderSplit[i][0] == '$')
+                {
+                    int temp = Convert.ToInt32(psorderSplit[i].Replace("$", ""));
+                    psorderSplit[i] = vars[temp] ;
+                }
+                result += psorderSplit[i];
+            }
+
+
+            return result;
         }
         // 프로세스 실행
         private static void doProgram(string filename, string arg)
@@ -311,6 +428,7 @@ namespace SR
             }
         }
 
+        //음성인식 활성화 버튼
         private void button3_Click(object sender, EventArgs e)
         {
             if (isSTTActive)
@@ -448,18 +566,10 @@ namespace SR
                     neworder.name = it2.Attributes["name"].Value;
                     neworder.description = it2.Attributes["description"].Value;
                     neworder.isInActive = false;
-                    foreach(XmlNode it3 in it2.SelectNodes("orderUnit"))
+                    foreach (XmlNode it3 in it2.SelectNodes("orderUnit"))
                     {
                         orderUnit newUnit = new orderUnit();
-
-                        //var
-                        string vars = it3.SelectSingleNode("var").InnerText;
-                        string[] var = vars.Split(' ', ',');
-                        foreach(string v in var)
-                        {
-                            newUnit.var.Add(v);
-                        }
-
+                        
                         //input
                         newUnit.input = it3.SelectSingleNode("input").InnerText;
 
@@ -475,7 +585,7 @@ namespace SR
                     listBox1.Items.Add(orderList[orderList.Count - 1]);
                 }
             }
-            
+
         }
         private void deleteOrder(string name)
         {
@@ -491,7 +601,7 @@ namespace SR
             listBox1.Items.Add(listBox2.SelectedItem);
             listBox2.Items.Remove(listBox2.SelectedItem);
         }
-        
+
 
         private void saveSettingAsXml(string path)
         {
@@ -503,7 +613,7 @@ namespace SR
 
             foreach (orderClass it in orderList)
             {
-                
+
                 order = xml.CreateElement("order");
                 XmlAttribute nameattribute = xml.CreateAttribute("name");
                 nameattribute.Value = it.name;
@@ -512,22 +622,11 @@ namespace SR
 
                 order.Attributes.Append(nameattribute);
                 order.Attributes.Append(descriptionattribute);
-                
-                foreach(orderUnit it2 in it.units)
+
+                foreach (orderUnit it2 in it.units)
                 {
                     XmlNode orderUnit = xml.CreateElement("orderUnit");
-
-                    //var
-                    XmlNode var = xml.CreateElement("var");
-                    string vars = "";
-                    for(int x = 0; x < it2.var.Count;x++)
-                    {
-                        vars += it2.var[x];
-                        if (x != it2.var.Count - 1)
-                            vars += ",";
-                    }
-                    var.InnerText = vars;
-
+                    
                     //input
                     XmlNode input = xml.CreateElement("input");
                     input.InnerText = it2.input;
@@ -537,8 +636,7 @@ namespace SR
 
                     XmlNode voiceOutput = xml.CreateElement("voiceOutput");
                     voiceOutput.InnerText = it2.voiceOutput;
-
-                    orderUnit.AppendChild(var);
+                    
                     orderUnit.AppendChild(input);
                     orderUnit.AppendChild(psorder);
                     orderUnit.AppendChild(voiceOutput);
@@ -595,15 +693,6 @@ namespace SR
         {
             sttTimer--;
 
-            if (gapiTimer > 0)
-            {
-                gapiTimer -= 0.001;
-            }
-            else if (gapiTimer < 0)
-            {
-                gapiTxtUpdate = true;
-                gapiTimer = 0;
-            }
 
             if (gapiTxtUpdate)
             {
@@ -612,12 +701,12 @@ namespace SR
 
                 richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
             }
-            else if(richboxtextsave != "")
+            else if (richboxtextsave != "")
             {
-                    richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
-                    richboxtextsave = "";
+                richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
+                richboxtextsave = "";
             }
-            
+
         }
 
         //description button
@@ -660,17 +749,16 @@ namespace SR
 
         private void TestButton_Click(object sender, EventArgs e)
         {
-            gapiTxt = "";
-            StreamingMicRecognizeAsync(_recognizeTimer);
-
+            //gapiTxt = "";
+            //StreamingMicRecognizeAsync(_recognizeTimer);
+            compareOrder("1 + 1", orderList[0].units[0]);
 
         }
-        
+
     }
-    
+
     class orderUnit
     {
-        public List<string> var = new List<string>();
         public string input = "";
         public string PSOrder = "";
         public string voiceOutput = "";

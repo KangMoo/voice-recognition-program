@@ -1,21 +1,18 @@
 ﻿<orders>
    <order name = "계산" description = "계산합니다">
       <orderUnit>
-         <var>A,B</var>
-         <input>$A 더하기 $B</input>
-         <PSOrder>$A+$B</PSOrder>
+         <input>$ + $</input>
+         <PSOrder>$0 + $1</PSOrder>
          <voiceOutput>결과는 $R입니다.</voiceOutput>
       </orderUnit>
       <orderUnit>
-         <var>B,C</var>
-         <input>$B 빼기 $C</input>
-         <PSOrder>$B-$C</PSOrder>
+         <input>$ 빼기 $</input>
+         <PSOrder>$0 - $1</PSOrder>
          <voiceOutput>결과는 $R입니다.</voiceOutput>
       </orderUnit>
       <orderUnit>
-         <var>A</var>
-         <input>$A 제곱근</input>
-         <PSOrder>[math]::sqrt($A)</PSOrder>
+         <input>$ 제곱근</input>
+         <PSOrder>[math]::sqrt($0)</PSOrder>
          <voiceOutput>결과는 $R입니다.</voiceOutput>
       </orderUnit>
    </order>
