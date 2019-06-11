@@ -1,5 +1,5 @@
 ﻿<orders>
-   <order name = "리소스 체크" description = "계산합니다">
+   <order name = "리소스 체크" description = "리소스 할당량이 많은 프로세스를 체크합니다">
       <orderUnit>
          <input>작업관리자 켜</input>
          <PSOrder>taskmgr</PSOrder>

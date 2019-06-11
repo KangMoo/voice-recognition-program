@@ -10,16 +10,21 @@ namespace SR
 {
     class PShell
     {
-        public string RunScript(string scriptText)
-        {
-            // create Powershell runspace
 
-            Runspace runspace = RunspaceFactory.CreateRunspace();
+        Runspace runspace = RunspaceFactory.CreateRunspace();
+        public PShell()
+        {
 
             // open it
 
             runspace.Open();
 
+        }
+        public string RunScript(string scriptText)
+        {
+            // create Powershell runspace
+
+            
             // create a pipeline and feed it the script text
 
             Pipeline pipeline = runspace.CreatePipeline();
@@ -42,7 +47,7 @@ namespace SR
 
             // close the runspace
 
-            runspace.Close();
+            //runspace.Close();
 
             // convert the script result into a single string
 

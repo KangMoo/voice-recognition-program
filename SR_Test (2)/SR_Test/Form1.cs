@@ -188,7 +188,7 @@ namespace SR
 
             if (e.Result.Text == "썬데이" || e.Result.Text == "선데이")
             {
-                richTextBox2.Text = "썬데이" + "\n" + richTextBox2.Text;
+                richTextBox2.Text = "<썬데이>" + "\n" + richTextBox2.Text;
                 inputmatch(sender, e);
             }
         }
@@ -202,6 +202,7 @@ namespace SR
             string inputString = gapiTxt;
             orderUnit oU = new orderUnit();
             bool brk = false;
+
             foreach (orderClass it in orderList)
             {
                 foreach (orderUnit it2 in it.units)
@@ -229,6 +230,7 @@ namespace SR
         {
             var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(inputString));
             List<KoreanToken> inputTokens = new List<KoreanToken>();
+
             List<KoreanToken> orderSplit = new List<KoreanToken>();
             List<string> vars = new List<string>();
 
@@ -239,84 +241,84 @@ namespace SR
                 inputTokens.Add(it);
             }
 
-          stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(oU.input));
-            foreach (KoreanToken it in stems)
-            {
-                if (it.Pos == KoreanPos.Space) continue;
-                else if (it.Text[0] == '$')
-                {
-                    if (it.Text == "$Noun")
-                        it.Pos = KoreanPos.Noun;
-                    else if (it.Text == "$Verb")
-                        it.Pos = KoreanPos.Verb;
-                    else if (it.Text == "$Adjective")
-                        it.Pos = KoreanPos.Adjective;
-                    else if (it.Text == "$Adverb")
-                        it.Pos = KoreanPos.Adverb;
-                    else if (it.Text == "$Determiner")
-                        it.Pos = KoreanPos.Determiner;
-                    else if (it.Text == "$Exclamation")
-                        it.Pos = KoreanPos.Exclamation;
-                    else if (it.Text == "$Josa")
-                        it.Pos = KoreanPos.Josa;
-                    else if (it.Text == "$Eomi")
-                        it.Pos = KoreanPos.Eomi;
-                    else if (it.Text == "$PreEomi")
-                        it.Pos = KoreanPos.PreEomi;
-                    else if (it.Text == "$Conjunction")
-                        it.Pos = KoreanPos.Conjunction;
-                    else if (it.Text == "$NounPrefix")
-                        it.Pos = KoreanPos.NounPrefix;
-                    else if (it.Text == "$VerbPrefix")
-                        it.Pos = KoreanPos.VerbPrefix;
-                    else if (it.Text == "$Suffix")
-                        it.Pos = KoreanPos.Suffix;
-                    else if (it.Text == "$Unknown")
-                        it.Pos = KoreanPos.Unknown;
-                    else if (it.Text == "$Korean")
-                        it.Pos = KoreanPos.Korean;
-                    else if (it.Text == "$Foreign")
-                        it.Pos = KoreanPos.Foreign;
-                    else if (it.Text == "$Number")
-                        it.Pos = KoreanPos.Number;
-                    else if (it.Text == "$KoreanParticle")
-                        it.Pos = KoreanPos.KoreanParticle;
-                    else if (it.Text == "$Alpha")
-                        it.Pos = KoreanPos.Alpha;
-                    else if (it.Text == "$Punctuation")
-                        it.Pos = KoreanPos.Punctuation;
-                    else if (it.Text == "$Hashtag")
-                        it.Pos = KoreanPos.Hashtag;
-                    else if (it.Text == "$ScreenName")
-                        it.Pos = KoreanPos.ScreenName;
-                    else if (it.Text == "$Email")
-                        it.Pos = KoreanPos.Email;
-                    else if (it.Text == "$URL")
-                        it.Pos = KoreanPos.URL;
-                    else if (it.Text == "$CashTag")
-                        it.Pos = KoreanPos.CashTag;
-                }
-                orderSplit.Add(it);
-            }
+            //stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(oU.input));
+            //foreach (KoreanToken it in stems)
+            //{
+            //    if (it.Pos == KoreanPos.Space) continue;
+            //    else if (it.Text[0] == '$')
+            //    {
+            //        if (it.Text == "$Noun")
+            //            it.Pos = KoreanPos.Noun;
+            //        else if (it.Text == "$Verb")
+            //            it.Pos = KoreanPos.Verb;
+            //        else if (it.Text == "$Adjective")
+            //            it.Pos = KoreanPos.Adjective;
+            //        else if (it.Text == "$Adverb")
+            //            it.Pos = KoreanPos.Adverb;
+            //        else if (it.Text == "$Determiner")
+            //            it.Pos = KoreanPos.Determiner;
+            //        else if (it.Text == "$Exclamation")
+            //            it.Pos = KoreanPos.Exclamation;
+            //        else if (it.Text == "$Josa")
+            //            it.Pos = KoreanPos.Josa;
+            //        else if (it.Text == "$Eomi")
+            //            it.Pos = KoreanPos.Eomi;
+            //        else if (it.Text == "$PreEomi")
+            //            it.Pos = KoreanPos.PreEomi;
+            //        else if (it.Text == "$Conjunction")
+            //            it.Pos = KoreanPos.Conjunction;
+            //        else if (it.Text == "$NounPrefix")
+            //            it.Pos = KoreanPos.NounPrefix;
+            //        else if (it.Text == "$VerbPrefix")
+            //            it.Pos = KoreanPos.VerbPrefix;
+            //        else if (it.Text == "$Suffix")
+            //            it.Pos = KoreanPos.Suffix;
+            //        else if (it.Text == "$Unknown")
+            //            it.Pos = KoreanPos.Unknown;
+            //        else if (it.Text == "$Korean")
+            //            it.Pos = KoreanPos.Korean;
+            //        else if (it.Text == "$Foreign")
+            //            it.Pos = KoreanPos.Foreign;
+            //        else if (it.Text == "$Number")
+            //            it.Pos = KoreanPos.Number;
+            //        else if (it.Text == "$KoreanParticle")
+            //            it.Pos = KoreanPos.KoreanParticle;
+            //        else if (it.Text == "$Alpha")
+            //            it.Pos = KoreanPos.Alpha;
+            //        else if (it.Text == "$Punctuation")
+            //            it.Pos = KoreanPos.Punctuation;
+            //        else if (it.Text == "$Hashtag")
+            //            it.Pos = KoreanPos.Hashtag;
+            //        else if (it.Text == "$ScreenName")
+            //            it.Pos = KoreanPos.ScreenName;
+            //        else if (it.Text == "$Email")
+            //            it.Pos = KoreanPos.Email;
+            //        else if (it.Text == "$URL")
+            //            it.Pos = KoreanPos.URL;
+            //        else if (it.Text == "$CashTag")
+            //            it.Pos = KoreanPos.CashTag;
+            //    }
+            //    orderSplit.Add(it);
+            //}
 
             int count = 0;
             for (int i = 0; i < inputTokens.Count(); i++)
             {
 
-                if (orderSplit[count].Pos == inputTokens[i].Pos && orderSplit[count].Text[0] == '$')
+                if (oU.orderSplit[count].Pos == inputTokens[i].Pos && oU.orderSplit[count].Text[0] == '$')
                 {
                     vars.Add(inputTokens[i].Text);
                     count++;
 
                 }
-                else if (orderSplit[count].Text == inputTokens[i].Text)
+                else if (oU.orderSplit[count].Text == inputTokens[i].Text)
                 {
                     count++;
                 }
-                if (count >= orderSplit.Count()) break;
+                if (count >= oU.orderSplit.Count()) break;
             }
 
-            if (count >= orderSplit.Count())
+            if (count >= oU.orderSplit.Count())
             {
                 return mkPSOrder(vars, oU);
             }
@@ -327,7 +329,7 @@ namespace SR
         private string mkPSOrder(List<string> vars, orderUnit oU)
         {
             string test = oU.PSOrder;
-            for(int i =0; i<vars.Count();i++)
+            for (int i = 0; i < vars.Count(); i++)
             {
                 test = test.Replace("$" + i.ToString(), vars[i]);
             }
@@ -380,7 +382,7 @@ namespace SR
             return output;
         }
 
-        private string makeOutputString(string result, string outVoice,bool erasernt)
+        private string makeOutputString(string result, string outVoice, bool erasernt)
         {
             outVoice = outVoice.Replace("$R", result);
 
@@ -392,6 +394,7 @@ namespace SR
             }
             return outVoice;
         }
+
         // 프로세스 종료
         private static void closeProcess(string filename)
         {
@@ -459,7 +462,7 @@ namespace SR
                 richTextBox1.Text = "음성인식이 활성화되었습니다." + "\n" + richTextBox1.Text;
                 //richTextBox2.Text = "";
                 timer1.Enabled = true;
-                
+
                 _Speech_On.Play();
             }
             if (orderList.Count > 0)
@@ -515,17 +518,27 @@ namespace SR
         private void button2_Click(object sender, EventArgs e)
         {
 
+            int count = listBox1.SelectedIndices.Count;
             if (listBox1.SelectedItem != null)
             {
-                orderClass temp = (orderClass)listBox1.SelectedItem;
-                listBox1.Items.Remove(listBox1.SelectedItem);
-                orderList.Remove(temp);
+                for (int i = 0; i < count; i++)
+                {
+                    orderClass temp = (orderClass)listBox1.SelectedItem;
+                    listBox1.Items.Remove(listBox1.SelectedItem);
+                    orderList.Remove(temp);
+                }
+
             }
+            count = listBox2.SelectedIndices.Count;
             if (listBox2.SelectedItem != null)
             {
-                orderClass temp = (orderClass)listBox2.SelectedItem;
-                listBox2.Items.Remove(listBox2.SelectedItem);
-                orderList.Remove(temp);
+                for (int i = 0; i < count; i++)
+                {
+                    orderClass temp = (orderClass)listBox2.SelectedItem;
+                    listBox2.Items.Remove(listBox2.SelectedItem);
+                    orderList.Remove(temp);
+                }
+
             }
         }
 
@@ -586,7 +599,66 @@ namespace SR
                         //voiceoutput
                         newUnit.voiceOutput = it3.SelectSingleNode("voiceOutput").InnerText;
 
-                        
+                        //ordersplit저장
+                        var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(newUnit.input));
+                        foreach (KoreanToken it4 in stems)
+                        {
+                            if (it4.Pos == KoreanPos.Space) continue;
+                            else if (it4.Text[0] == '$')
+                            {
+                                if (it4.Text == "$Noun")
+                                    it4.Pos = KoreanPos.Noun;
+                                else if (it4.Text == "$Verb")
+                                    it4.Pos = KoreanPos.Verb;
+                                else if (it4.Text == "$Adjective")
+                                    it4.Pos = KoreanPos.Adjective;
+                                else if (it4.Text == "$Adverb")
+                                    it4.Pos = KoreanPos.Adverb;
+                                else if (it4.Text == "$Determiner")
+                                    it4.Pos = KoreanPos.Determiner;
+                                else if (it4.Text == "$Exclamation")
+                                    it4.Pos = KoreanPos.Exclamation;
+                                else if (it4.Text == "$Josa")
+                                    it4.Pos = KoreanPos.Josa;
+                                else if (it4.Text == "$Eomi")
+                                    it4.Pos = KoreanPos.Eomi;
+                                else if (it4.Text == "$PreEomi")
+                                    it4.Pos = KoreanPos.PreEomi;
+                                else if (it4.Text == "$Conjunction")
+                                    it4.Pos = KoreanPos.Conjunction;
+                                else if (it4.Text == "$NounPrefix")
+                                    it4.Pos = KoreanPos.NounPrefix;
+                                else if (it4.Text == "$VerbPrefix")
+                                    it4.Pos = KoreanPos.VerbPrefix;
+                                else if (it4.Text == "$Suffix")
+                                    it4.Pos = KoreanPos.Suffix;
+                                else if (it4.Text == "$Unknown")
+                                    it4.Pos = KoreanPos.Unknown;
+                                else if (it4.Text == "$Korean")
+                                    it4.Pos = KoreanPos.Korean;
+                                else if (it4.Text == "$Foreign")
+                                    it4.Pos = KoreanPos.Foreign;
+                                else if (it4.Text == "$Number")
+                                    it4.Pos = KoreanPos.Number;
+                                else if (it4.Text == "$KoreanParticle")
+                                    it4.Pos = KoreanPos.KoreanParticle;
+                                else if (it4.Text == "$Alpha")
+                                    it4.Pos = KoreanPos.Alpha;
+                                else if (it4.Text == "$Punctuation")
+                                    it4.Pos = KoreanPos.Punctuation;
+                                else if (it4.Text == "$Hashtag")
+                                    it4.Pos = KoreanPos.Hashtag;
+                                else if (it4.Text == "$ScreenName")
+                                    it4.Pos = KoreanPos.ScreenName;
+                                else if (it4.Text == "$Email")
+                                    it4.Pos = KoreanPos.Email;
+                                else if (it4.Text == "$URL")
+                                    it4.Pos = KoreanPos.URL;
+                                else if (it4.Text == "$CashTag")
+                                    it4.Pos = KoreanPos.CashTag;
+                            }
+                            newUnit.orderSplit.Add(it4);
+                        }
                         neworder.units.Add(newUnit);
                     }
                     orderList.Add(neworder);
@@ -653,7 +725,7 @@ namespace SR
                     orderUnit.AppendChild(psorder);
                     orderUnit.AppendChild(textOutput);
                     orderUnit.AppendChild(voiceOutput);
-                    
+
 
                     order.AppendChild(orderUnit);
                 }
@@ -732,11 +804,6 @@ namespace SR
             {
                 orderClass temp = (orderClass)listBox1.SelectedItem;
                 str += temp.description + "\n\n";
-                str += "<실행 명령어>\n";
-                foreach (orderUnit it in temp.units)
-                {
-                    str += it.voiceOutput + "\n";
-                }
                 MessageBox.Show(str);
                 return;
             }
@@ -744,11 +811,6 @@ namespace SR
             {
                 orderClass temp = (orderClass)listBox2.SelectedItem;
                 str += temp.description + "\n\n";
-                str += "<실행 명령어>\n";
-                foreach (orderUnit it in temp.units)
-                {
-                    str += it.input + "\n";
-                }
                 MessageBox.Show(str);
                 return;
             }
@@ -775,6 +837,7 @@ namespace SR
         public string PSOrder = "";
         public string voiceOutput = "";
         public string textOutput = "";
+        public List<KoreanToken> orderSplit = new List<KoreanToken>();
         public orderUnit() { }
         public orderUnit(string input, string PSOrder, string voiceOutput)
         {

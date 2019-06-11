@@ -1,0 +1,89 @@
+﻿<orders>
+   <order name = "타이머" description = "타이머를 실행합니다.">
+      <orderUnit>
+         <input>$Number 초 후에 알람</input>
+         <PSOrder>
+
+$alarmTime = get-date
+$alarmTime = $alarmTime.AddSeconds( $0 )
+$nowTime = get-date 
+$tsSeconds = ($alarmTime - $nowTime).Seconds
+$timeSpan = New-TimeSpan -Seconds $tsSeconds
+$timer = New-Object System.Timers.Timer
+Register-ObjectEvent -InputObject $timer -EventName Elapsed -Action { [System.Windows.Forms.MessageBox]::Show("알람!!" , "Alert!") } | out-null
+$timer.Autoreset = $false 
+$timer.Interval = $timeSpan.TotalMilliseconds
+$timer.Enabled = $true
+$alarmTime.Hour.ToString()+"시 " + $alarmTime.Minute.ToString()+"분 " + $alarmTime.Second.ToString()+ "초"
+
+         </PSOrder>
+         <textOutput>$R에 알람을 울립니다.</textOutput>
+         <voiceOutput>$R에 알람을 울립니다.</voiceOutput>
+      </orderUnit>
+
+     <orderUnit>
+         <input>$Number 초 뒤에 알람</input>
+         <PSOrder>
+
+$alarmTime = get-date
+$alarmTime = $alarmTime.AddSeconds( $0 )
+$nowTime = get-date 
+$tsSeconds = ($alarmTime - $nowTime).Seconds
+$timeSpan = New-TimeSpan -Seconds $tsSeconds
+$timer = New-Object System.Timers.Timer
+Register-ObjectEvent -InputObject $timer -EventName Elapsed -Action { [System.Windows.Forms.MessageBox]::Show("알람!!" , "Alert!") } | out-null
+$timer.Autoreset = $false 
+$timer.Interval = $timeSpan.TotalMilliseconds
+$timer.Enabled = $true
+$alarmTime.Hour.ToString()+"시 " + $alarmTime.Minute.ToString()+"분 " + $alarmTime.Second.ToString()+ "초"
+
+         </PSOrder>
+         <textOutput>$R에 알람을 울립니다.</textOutput>
+         <voiceOutput>$R에 알람을 울립니다.</voiceOutput>
+      </orderUnit>
+
+
+     <orderUnit>
+         <input>$Number 분 후에 알람</input>
+         <PSOrder>
+
+$alarmTime = get-date
+$alarmTime = $alarmTime.AddMinutes( $0 )
+$nowTime = get-date 
+$tsSeconds = ($alarmTime - $nowTime).Seconds
+$timeSpan = New-TimeSpan -Seconds $tsSeconds
+$timer = New-Object System.Timers.Timer
+Register-ObjectEvent -InputObject $timer -EventName Elapsed -Action { [System.Windows.Forms.MessageBox]::Show("알람!!" , "Alert!") } | out-null
+$timer.Autoreset = $false 
+$timer.Interval = $timeSpan.TotalMilliseconds
+$timer.Enabled = $true
+$alarmTime.Hour.ToString()+"시 " + $alarmTime.Minute.ToString()+"분 "
+
+         </PSOrder>
+         <textOutput>$R에 알람을 울립니다.</textOutput>
+         <voiceOutput>$R에 알람을 울립니다.</voiceOutput>
+      </orderUnit>
+
+
+     <orderUnit>
+         <input>$Number 분 뒤에 알람</input>
+         <PSOrder>
+
+$alarmTime = get-date
+$alarmTime = $alarmTime.AddMinutes( $0 )
+$nowTime = get-date 
+$tsSeconds = ($alarmTime - $nowTime).Seconds
+$timeSpan = New-TimeSpan -Seconds $tsSeconds
+$timer = New-Object System.Timers.Timer
+Register-ObjectEvent -InputObject $timer -EventName Elapsed -Action { [System.Windows.Forms.MessageBox]::Show("알람!!" , "Alert!") } | out-null
+$timer.Autoreset = $false 
+$timer.Interval = $timeSpan.TotalMilliseconds
+$timer.Enabled = $true
+$alarmTime.Hour.ToString()+"시 " + $alarmTime.Minute.ToString()+"분 "
+
+         </PSOrder>
+         <textOutput>$R에 알람을 울립니다.</textOutput>
+         <voiceOutput>$R에 알람을 울립니다.</voiceOutput>
+      </orderUnit>
+   </order>
+</orders>
