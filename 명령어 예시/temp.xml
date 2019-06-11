@@ -1,0 +1,28 @@
+﻿<orders>
+   <order name = "리소스 체크" description = "계산합니다">
+      <orderUnit>
+         <input>작업관리자 켜</input>
+         <PSOrder>taskmgr</PSOrder>
+         <textOutput>작업관리자를 실행합니다.</textOutput>
+         <voiceOutput>작업관리자를 실행합니다</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>CPU 가장 많이 $Number</input>
+         <PSOrder>
+$list = Get-Process | Sort-Object -Property CPU | Select-Object -Last $0
+$list.ProcessName
+         </PSOrder>
+         <textOutput>$R</textOutput>
+         <voiceOutput>결과를 출력합니다</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>CPU 가장 많이 </input>
+         <PSOrder>
+$list = Get-Process | Sort-Object -Property CPU | Select-Object -Last 1
+$list.ProcessName
+         </PSOrder>
+         <textOutput>$R이(가) CPU를 가장 많이 차지합니다</textOutput>
+         <voiceOutput>$R입니다</voiceOutput>
+      </orderUnit>
+   </order>
+</orders>

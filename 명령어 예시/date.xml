@@ -1,0 +1,28 @@
+﻿<orders>
+   <order name = "현재시각" description = "현재시각을 알려줍니다">
+      <orderUnit>
+         <input>시간</input>
+         <PSOrder>Get-Date -format "h시 m분"</PSOrder>
+         <textOutput>$R</textOutput>
+         <voiceOutput>$R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>시각</input>
+         <PSOrder>Get-Date -format "h시 m분"</PSOrder>
+         <textOutput>$R</textOutput>
+         <voiceOutput>$R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>몇 시</input>
+         <PSOrder>Get-Date -format "h시 m분"</PSOrder>
+         <textOutput>$R</textOutput>
+         <voiceOutput>$R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>날짜</input>
+         <PSOrder>Get-Date -format "M월 d일"</PSOrder>
+         <textOutput>$R</textOutput>
+         <voiceOutput>$R입니다.</voiceOutput>
+      </orderUnit>
+   </order>
+</orders>

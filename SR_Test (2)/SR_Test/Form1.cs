@@ -113,6 +113,7 @@ namespace SR
             await streamingCall.WriteCompleteAsync();
             await printResponses;
             gapiTxtUpdate = false;
+            _Speech_Sleep.Play();
             return 0;
         }
         // [END speech_transcribe_streaming_mic]
@@ -126,7 +127,7 @@ namespace SR
         private List<orderClass> orderList;
         ProcessStartInfo cmd = new ProcessStartInfo();
         Process process = new Process();
-        PowerShell ps = PowerShell.Create();
+        PShell ps = new PShell();
         bool isSTTActive;
         float sttTimer = 0;
         Grammar g;
@@ -181,10 +182,13 @@ namespace SR
 
             if (isSTTActive == false && sttTimer > 0) return;
             if (tts.State != SynthesizerState.Ready) return;
+            if (gapiTxtUpdate == true) return;
+
             sttTimer = 3;
 
             if (e.Result.Text == "썬데이" || e.Result.Text == "선데이")
             {
+                richTextBox2.Text = "썬데이" + "\n" + richTextBox2.Text;
                 inputmatch(sender, e);
             }
         }
@@ -205,151 +209,129 @@ namespace SR
                     string temp = compareOrder(inputString, it2);
                     if (temp != "")
                     {
-                        int k = 0;
-                        //doPowerShellProgram(temp);
+                        string result = doPowerShellProgram(temp);
+                        string textOutput = makeOutputString(result, it2.textOutput, false);
+                        string outVoice = makeOutputString(result, it2.voiceOutput, true);
+
+                        richTextBox1.Text = textOutput + "\n" + richTextBox1.Text;
+                        richTextBox1.Update();
+                        tts.Speak(outVoice);
+                        break;
                     }
                 }
                 if (brk == true) break;
             }
 
-            //mkPSOrder();
-            //doPowerShellProgram(oU.PSOrder);
         }
 
         //명령어가 매칭이 맞을경우 PowerShell 명령어 생성후 리턴/ 아니면 ""리턴
         private string compareOrder(string inputString, orderUnit oU)
         {
             var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(inputString));
-            List<string> inputTokens = new List<string>();
-            List<string> orderSplit = new List<string>();
+            List<KoreanToken> inputTokens = new List<KoreanToken>();
+            List<KoreanToken> orderSplit = new List<KoreanToken>();
+            List<string> vars = new List<string>();
 
             //형태소 분석기를 통해 추려내기
             foreach (KoreanToken it in stems)
             {
                 if (it.Pos == KoreanPos.Space) continue;
-                inputTokens.Add(it.Text);
+                inputTokens.Add(it);
             }
-            stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(oU.input));
+
+          stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(oU.input));
             foreach (KoreanToken it in stems)
             {
                 if (it.Pos == KoreanPos.Space) continue;
-                orderSplit.Add(it.Text);
+                else if (it.Text[0] == '$')
+                {
+                    if (it.Text == "$Noun")
+                        it.Pos = KoreanPos.Noun;
+                    else if (it.Text == "$Verb")
+                        it.Pos = KoreanPos.Verb;
+                    else if (it.Text == "$Adjective")
+                        it.Pos = KoreanPos.Adjective;
+                    else if (it.Text == "$Adverb")
+                        it.Pos = KoreanPos.Adverb;
+                    else if (it.Text == "$Determiner")
+                        it.Pos = KoreanPos.Determiner;
+                    else if (it.Text == "$Exclamation")
+                        it.Pos = KoreanPos.Exclamation;
+                    else if (it.Text == "$Josa")
+                        it.Pos = KoreanPos.Josa;
+                    else if (it.Text == "$Eomi")
+                        it.Pos = KoreanPos.Eomi;
+                    else if (it.Text == "$PreEomi")
+                        it.Pos = KoreanPos.PreEomi;
+                    else if (it.Text == "$Conjunction")
+                        it.Pos = KoreanPos.Conjunction;
+                    else if (it.Text == "$NounPrefix")
+                        it.Pos = KoreanPos.NounPrefix;
+                    else if (it.Text == "$VerbPrefix")
+                        it.Pos = KoreanPos.VerbPrefix;
+                    else if (it.Text == "$Suffix")
+                        it.Pos = KoreanPos.Suffix;
+                    else if (it.Text == "$Unknown")
+                        it.Pos = KoreanPos.Unknown;
+                    else if (it.Text == "$Korean")
+                        it.Pos = KoreanPos.Korean;
+                    else if (it.Text == "$Foreign")
+                        it.Pos = KoreanPos.Foreign;
+                    else if (it.Text == "$Number")
+                        it.Pos = KoreanPos.Number;
+                    else if (it.Text == "$KoreanParticle")
+                        it.Pos = KoreanPos.KoreanParticle;
+                    else if (it.Text == "$Alpha")
+                        it.Pos = KoreanPos.Alpha;
+                    else if (it.Text == "$Punctuation")
+                        it.Pos = KoreanPos.Punctuation;
+                    else if (it.Text == "$Hashtag")
+                        it.Pos = KoreanPos.Hashtag;
+                    else if (it.Text == "$ScreenName")
+                        it.Pos = KoreanPos.ScreenName;
+                    else if (it.Text == "$Email")
+                        it.Pos = KoreanPos.Email;
+                    else if (it.Text == "$URL")
+                        it.Pos = KoreanPos.URL;
+                    else if (it.Text == "$CashTag")
+                        it.Pos = KoreanPos.CashTag;
+                }
+                orderSplit.Add(it);
             }
 
-            List<string> vars = new List<string>();
-            int varCount = 0;
-            int splitcount = 0;
-            int nowPoint = 0;
-            bool incorrect = false;
-
-            //명령어 매칭
+            int count = 0;
             for (int i = 0; i < inputTokens.Count(); i++)
             {
-                if (splitcount >= orderSplit.Count() && varCount > 0)
+
+                if (orderSplit[count].Pos == inputTokens[i].Pos && orderSplit[count].Text[0] == '$')
                 {
-                    //incorrect
-                    if (nowPoint + varCount >= inputTokens.Count())
-                    {
-                        incorrect = true;
-                        break;
-                    }
-                    else
-                    {
-                        while (varCount > 0)
-                        {
-                            vars.Add(inputTokens[i]);
-                            i++;
-                            varCount--;
-                        }
-                        break;
-                    }
+                    vars.Add(inputTokens[i].Text);
+                    count++;
+
                 }
-                else if (orderSplit[splitcount][0] == '$')
+                else if (orderSplit[count].Text == inputTokens[i].Text)
                 {
-                    varCount++;
-                    splitcount++;
-                    i--;
+                    count++;
                 }
-                else if (orderSplit[splitcount] == inputTokens[i])
-                {
-                    if (varCount > 0)
-                    {
-                        //incorrect
-                        if (varCount > i)
-                        {
-                            incorrect = true;
-                            break;
-                        }
-                        else
-                        {
-                            while (varCount > 0)
-                            {
-                                vars.Add(inputTokens[i - varCount]);
-                                varCount--;
-                            }
-                        }
-                    }
-                    nowPoint = i;
-                    splitcount++;
-                }
+                if (count >= orderSplit.Count()) break;
             }
 
-            int kkk = 0;
-
-            if (incorrect || splitcount != orderSplit.Count())
+            if (count >= orderSplit.Count())
             {
-                return "";
+                return mkPSOrder(vars, oU);
             }
-
-            return mkPSOrder(vars, oU);
-
+            return "";
         }
+
         //PowerShell 명령어 만드는 함수
         private string mkPSOrder(List<string> vars, orderUnit oU)
         {
-
-            //변수 채워넣기
-            string[] dSplit = oU.PSOrder.Split('$');
-            for(int i =1; i<dSplit.Count();i++)
+            string test = oU.PSOrder;
+            for(int i =0; i<vars.Count();i++)
             {
-                int num = dSplit[i][0] - '0';
-                dSplit[i] = dSplit[i].Remove(0, 1);
-                dSplit[i] = vars[num] + dSplit[i];
+                test = test.Replace("$" + i.ToString(), vars[i]);
             }
-            string PSOrder = "";
-            foreach(string x in dSplit)
-            {
-                PSOrder += x;
-            }
-            var stems = TwitterKoreanProcessorCS.Stem(TwitterKoreanProcessorCS.Tokenize(PSOrder));
-            List<string> psorderSplit = new List<string>();
-            string result = "";
-            //형태소 분석기를 통해 추려내기
-            foreach (KoreanToken it in stems)
-            {
-                psorderSplit.Add(it.Text);
-            }
-
-            for (int i = 0; i < psorderSplit.Count(); i++)
-            {
-                if (psorderSplit[i][0] == '$')
-                {
-                    psorderSplit[i] += psorderSplit[i + 1];
-                    psorderSplit.RemoveAt(i + 1);
-                }
-            }
-            for (int i =0; i<psorderSplit.Count();i++)
-            {
-                if(psorderSplit[i][0] == '$')
-                {
-                    int temp = Convert.ToInt32(psorderSplit[i].Replace("$", ""));
-                    psorderSplit[i] = vars[temp] ;
-                }
-                result += psorderSplit[i];
-            }
-
-
-            return result;
+            return test;
         }
         // 프로세스 실행
         private static void doProgram(string filename, string arg)
@@ -385,12 +367,31 @@ namespace SR
             //process.Close();
         }
 
-        private void doPowerShellProgram(string order)
+        //PowerShellProgram 실햄 함수
+        private string doPowerShellProgram(string order)
         {
-            ps.AddCommand(order);
-            ps.Invoke();
+            string output = ps.RunScript(order);
+            if (output.Count() >= 4)
+            {
+                string temp = output.Substring(output.Count() - 4, 4);
+                if (output.Substring(output.Count() - 4, 4) == "\r\n\r\n")
+                    output = output.Remove(output.Count() - 4, 4);
+            }
+            return output;
         }
 
+        private string makeOutputString(string result, string outVoice,bool erasernt)
+        {
+            outVoice = outVoice.Replace("$R", result);
+
+            if (erasernt)
+            {
+                outVoice = outVoice.Replace("\r", "");
+                outVoice = outVoice.Replace("\n", "");
+                outVoice = outVoice.Replace("\t", "");
+            }
+            return outVoice;
+        }
         // 프로세스 종료
         private static void closeProcess(string filename)
         {
@@ -440,9 +441,11 @@ namespace SR
                 button4.Enabled = true;
                 button5.Enabled = true;
                 button6.Enabled = true;
-                richTextBox1.Text = "음성인식이 비활성화되었습니다.";
-                richTextBox2.Text = "";
+                richTextBox1.Text = "음성인식이 비활성화되었습니다." + "\n" + richTextBox1.Text;
+                //richTextBox2.Text = "";
                 timer1.Enabled = false;
+
+                _Speech_Sleep.Play();
             }
             else
             {
@@ -453,9 +456,11 @@ namespace SR
                 button4.Enabled = false;
                 button5.Enabled = false;
                 button6.Enabled = false;
-                richTextBox1.Text = "음성인식이 활성화되었습니다.";
-                richTextBox2.Text = "";
+                richTextBox1.Text = "음성인식이 활성화되었습니다." + "\n" + richTextBox1.Text;
+                //richTextBox2.Text = "";
                 timer1.Enabled = true;
+                
+                _Speech_On.Play();
             }
             if (orderList.Count > 0)
                 grammarSet();
@@ -569,16 +574,19 @@ namespace SR
                     foreach (XmlNode it3 in it2.SelectNodes("orderUnit"))
                     {
                         orderUnit newUnit = new orderUnit();
-                        
+
                         //input
                         newUnit.input = it3.SelectSingleNode("input").InnerText;
 
                         //psorder
                         newUnit.PSOrder = it3.SelectSingleNode("PSOrder").InnerText;
 
+                        newUnit.textOutput = it3.SelectSingleNode("textOutput").InnerText;
+
                         //voiceoutput
                         newUnit.voiceOutput = it3.SelectSingleNode("voiceOutput").InnerText;
 
+                        
                         neworder.units.Add(newUnit);
                     }
                     orderList.Add(neworder);
@@ -626,7 +634,8 @@ namespace SR
                 foreach (orderUnit it2 in it.units)
                 {
                     XmlNode orderUnit = xml.CreateElement("orderUnit");
-                    
+
+
                     //input
                     XmlNode input = xml.CreateElement("input");
                     input.InnerText = it2.input;
@@ -636,10 +645,15 @@ namespace SR
 
                     XmlNode voiceOutput = xml.CreateElement("voiceOutput");
                     voiceOutput.InnerText = it2.voiceOutput;
-                    
+
+                    XmlNode textOutput = xml.CreateElement("textOutput");
+                    textOutput.InnerText = it2.textOutput;
+
                     orderUnit.AppendChild(input);
                     orderUnit.AppendChild(psorder);
+                    orderUnit.AppendChild(textOutput);
                     orderUnit.AppendChild(voiceOutput);
+                    
 
                     order.AppendChild(orderUnit);
                 }
@@ -697,13 +711,13 @@ namespace SR
             if (gapiTxtUpdate)
             {
                 if (richboxtextsave == "")
-                    richboxtextsave = "명령을 말씀해 주세요" + "\n" + richTextBox1.Text;
+                    richboxtextsave = richTextBox2.Text;
 
-                richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
+                richTextBox2.Text = gapiTxt + "\n" + richboxtextsave;
             }
             else if (richboxtextsave != "")
             {
-                richTextBox1.Text = gapiTxt + "\n" + richboxtextsave;
+                richTextBox2.Text = gapiTxt + "\n" + richboxtextsave;
                 richboxtextsave = "";
             }
 
@@ -749,10 +763,8 @@ namespace SR
 
         private void TestButton_Click(object sender, EventArgs e)
         {
-            //gapiTxt = "";
-            //StreamingMicRecognizeAsync(_recognizeTimer);
-            compareOrder("1 + 1", orderList[0].units[0]);
-
+            richTextBox1.Clear();
+            richTextBox2.Clear();
         }
 
     }
@@ -762,6 +774,7 @@ namespace SR
         public string input = "";
         public string PSOrder = "";
         public string voiceOutput = "";
+        public string textOutput = "";
         public orderUnit() { }
         public orderUnit(string input, string PSOrder, string voiceOutput)
         {

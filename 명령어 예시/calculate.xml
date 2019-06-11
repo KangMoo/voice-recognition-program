@@ -1,0 +1,34 @@
+﻿<orders>
+   <order name = "계산" description = "계산합니다">
+      <orderUnit>
+         <input>$Number + $Number</input>
+         <PSOrder>$0 + $1</PSOrder>
+         <textOutput>결과는 $R입니다.</textOutput>
+         <voiceOutput>결과는 $R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>$Number 더하다 $Number</input>
+         <PSOrder>$0 +$1</PSOrder>
+         <textOutput>결과는 $R입니다.</textOutput>
+         <voiceOutput>결과는 $R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>$Number $Number 더하다 </input>
+         <PSOrder>$0 +$1</PSOrder>
+         <textOutput>결과는 $R입니다.</textOutput>
+         <voiceOutput>결과는 $R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>$Number 빼기 $Number</input>
+         <PSOrder>$0 - $1</PSOrder>
+         <textOutput>결과는 $R입니다.</textOutput>
+         <voiceOutput>결과는 $R입니다.</voiceOutput>
+      </orderUnit>
+      <orderUnit>
+         <input>$Number 제곱근</input>
+         <PSOrder>[math]::sqrt($0)</PSOrder>
+         <textOutput>결과는 $R입니다.</textOutput>
+         <voiceOutput>결과는 $R입니다.</voiceOutput>
+      </orderUnit>
+   </order>
+</orders>
