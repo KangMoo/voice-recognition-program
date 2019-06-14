@@ -1,0 +1,20 @@
+﻿<orders>
+   <order name = "마우스 감도 조절" description = "마우스 감도를 조절합니다.">
+      <orderUnit>
+         <input>마우스 감도 $Number</input>
+         <PSOrder>
+$MethodDefinition = @" 
+    [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")] 
+    public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni); 
+"@ 
+$User32 = Add-Type -MemberDefinition $MethodDefinition -Name "User32Set" -Namespace Win32Functions -PassThru
+[Int32]$Speed = $0  
+$User32::SystemParametersInfo(0x0071,0,$Speed,0) | Out-Null
+Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name MouseSensitivity -Value $Speed\
+$Speed
+         </PSOrder>
+         <textOutput>마우스 감도 >> $R</textOutput>
+         <voiceOutput>마우스 감도를 $R로 변경하였습니다.</voiceOutput>
+      </orderUnit>
+   </order>
+</orders>
