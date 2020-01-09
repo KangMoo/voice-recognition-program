@@ -1,8 +1,8 @@
-<»ç¿ëÇÑ ¿ÀÇÂ¼Ò½º>
-twitter ÇüÅÂ¼Ò ºĞ¼®±â
+<ì‚¬ìš©í•œ ì˜¤í”ˆì†ŒìŠ¤>
+twitter í˜•íƒœì†Œ ë¶„ì„ê¸°
 (https://github.com/twitter/twitter-korean-text)
 
-<ÇÊ¿äÇ×¸ñ>
+<í•„ìš”í•­ëª©>
 Microsoft Speech Platform - Runtime (Version 11)
 (http://www.microsoft.com/en-us/download/details.aspx?id=27225)
 
@@ -12,12 +12,12 @@ Microsoft Speech Platform - Software Development Kit (SDK) (Version 11)
 Microsoft Speech Platform - Runtime Languages (Version 11)
 (http://www.microsoft.com/en-us/download/details.aspx?id=27224)
 
-ÇÑ±Û À½¼ºÀÎ½Ä: MSSpeech_SR_ko-KR_TELE.msi
-ÇÑ±Û TTS: MSSpeech_TTS_ko-KR_Heami.msi
+í•œê¸€ ìŒì„±ì¸ì‹: MSSpeech_SR_ko-KR_TELE.msi
+í•œê¸€ TTS: MSSpeech_TTS_ko-KR_Heami.msi
 
 
-±¸±Û API
+êµ¬ê¸€ API
 
-±¸±Û API Å° ¹ß±Ş ¹ŞÀº ÈÄ¿¡ JSON ÆÄÀÏ·Î ÀúÀå ÈÄ È¯°æ º¯¼ö¿¡ ÆÄÀÏ À§Ä¡ µî·Ï(º¯¼ö¸í : GOOGLE_APPLICATION_CREDENTIALS)
+êµ¬ê¸€ API í‚¤ ë°œê¸‰ ë°›ì€ í›„ì— JSON íŒŒì¼ë¡œ ì €ì¥ í›„ í™˜ê²½ ë³€ìˆ˜ì— íŒŒì¼ ìœ„ì¹˜ ë“±ë¡(ë³€ìˆ˜ëª… : GOOGLE_APPLICATION_CREDENTIALS)
 
 
