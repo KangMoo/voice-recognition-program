@@ -1,7 +1,7 @@
 #### 참고한 자료 및 사용한 오픈소스
 
-twitter 형태소 분석기
-(https://github.com/twitter/twitter-korean-text)
+* twitter 형태소 분석기
+** (https://github.com/twitter/twitter-korean-text)
 
 #### 필요항목
 
