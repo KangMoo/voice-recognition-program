@@ -4,6 +4,7 @@ twitter 형태소 분석기
 (https://github.com/twitter/twitter-korean-text)
 
 <필요항목>
+
 Microsoft Speech Platform - Runtime (Version 11)
 (http://www.microsoft.com/en-us/download/details.aspx?id=27225)
 
